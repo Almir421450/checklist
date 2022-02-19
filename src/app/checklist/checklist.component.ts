@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 export const CHECKLIST_DATA = [
 
   { guid:'aaaa-bbbb-cccc-dddd', completed: false, description:'ir ao oftalmologista', deadLine: Date.now(), postDate: Date.now(),
-   category: CATEGORY_DATA.find(x => x.name == 'Saude')
+   category: CATEGORY_DATA.find(x => x.name == 'Saúde')
   },
   { guid:'aaaa-bbbb-cccc-dddd', completed: true, description:'Reunião com o gerente regional', deadLine: Date.now(), postDate: Date.now(),
    category: CATEGORY_DATA.find(x => x.name == 'Trabalho')
