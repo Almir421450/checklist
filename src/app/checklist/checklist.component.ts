@@ -1,17 +1,12 @@
-import { ChecklistItem } from './../_models/checklist_item';
-import { CATEGORY_DATA } from './../category/category.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from './../dialog/dialog.component';
+
 import { Component, OnInit } from '@angular/core';
+import { ChecklistEditComponent } from '../checklist-edit/checklist-edit.component';
+import { ChecklistItem } from '../_models/checklist_item';
+import { ChecklistService } from '../service/checklist.service';
 
 
-export const CHECKLIST_DATA = [
-
-  { guid:'aaaa-bbbb-cccc-dddd', completed: false, description:'ir ao oftalmologista', deadLine: Date.now(), postDate: Date.now(),
-   category: CATEGORY_DATA.find(x => x.name == 'Saúde')
-  },
-  { guid:'aaaa-bbbb-cccc-dddd', completed: true, description:'Reunião com o gerente regional', deadLine: Date.now(), postDate: Date.now(),
-   category: CATEGORY_DATA.find(x => x.name == 'Trabalho')
-  }
-];
 
 @Component({
   selector: 'app-checklist',
@@ -20,14 +15,21 @@ export const CHECKLIST_DATA = [
 })
 export class ChecklistComponent implements OnInit {
 
-  public dataSource = CHECKLIST_DATA;
+  public dataSource : ChecklistItem[] = [];
 
   public displayedColumns: string[] = ['id', 'completed',
   'description', 'deadLine', 'postDate', 'category', 'actions'];
 
-  constructor() { }
+
+  constructor(private dialog: MatDialog, private checklistService: ChecklistService) { }
 
   ngOnInit(): void {
+
+    this.checklistService.getAllchecklistItens().subscribe(
+      (resp: ChecklistItem[]) => {
+        this.dataSource = resp;
+      }
+    )
   }
 
   public updateCompleteStatus(status: boolean){
@@ -36,13 +38,32 @@ export class ChecklistComponent implements OnInit {
 
   public creatNewItem(){
     console.log('Criar Novo item clicado!');
+
+    this.dialog.open(ChecklistEditComponent,{
+      disableClose: true, data:{actionName:'Criar'},
+    }).afterClosed().subscribe(resp => {
+      console.log('Fechando Modal de criação');
+    });
   }
 
   public deleteChecklistItem(checklistItem:ChecklistItem ){
     console.log('deletando item do check list')
+
+    this.dialog.open(DialogComponent, {disableClose: true, data: {
+      msg: 'Você deseja apagar esse item ?', leftButtonLabel:'cancelar', rightButtonLabel:'Ok'}
+    }).afterClosed().subscribe(resp =>{
+      console.log('Janela Modal fechada ')
+
+    })
   }
 
   public updateChecklistItem(checklistItem:ChecklistItem){
     console.log('atualizando item do check list')
+
+    this.dialog.open(ChecklistEditComponent,{
+      disableClose: true, data:{updatableChecklistItem: checklistItem, actionName:'Editar'},
+    }).afterClosed().subscribe(resp => {
+      console.log('Fechando Modal de edição');
+    });
   }
 }

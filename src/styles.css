@@ -36,3 +36,18 @@ justify-content: space-evenly;
 .w-300{
   width: 300px;
 }
+
+.w-450{
+  width: 450px;
+}
+
+.flx-clm{
+  display: flex !important;
+  flex-direction: column;
+}
+
+.flx-row{
+  display: flex !important;
+  flex-direction: row;
+  
+}
